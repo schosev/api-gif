@@ -1,16 +1,16 @@
-//giphy api key: Y8O1g1GuXVaHsUrdiBkw3x7nfIjIgOqa
 
 var topics = ["clouds", "forest", "rain", "lava", "northern lights", "ocean", "snow", "sand", "desert",
-                        "sunset", "wind", "trees"];
+                        "sunset", "wind", "trees", "comets", "waterfall", "landscape", "mountains", "moon"];
 
 var isPlaying = false;
 
 function createButtons () {
+    //create the buttons at the top of the page for the elements in the topics array.
     $("#buttons").empty();
 
     for (var i=0; i<topics.length; i++) {
         var newButton = $("<button>");
-        newButton.addClass("btn-md btn-danger natureButtons");
+        newButton.addClass("btn-danger natureButtons");
         newButton.attr("data-name", topics[i]);
         newButton.text(topics[i]);
 
@@ -18,29 +18,29 @@ function createButtons () {
     }
 }
 
+//create a new button at the top for the value typed in by the user.
 $("#submit-btn").on("click", function(event) {
     event.preventDefault();
 
     var input = $("#nature-input").val().trim().toLowerCase();
-    console.log("input: " + input);
 
     topics.push(input);
     createButtons();
+    $("#nature-input").val("");
 })
 
 function showGifs() {
-
+    //on click of the button, make a call to giphy.com to get 10 gifs based on the value of the button
     var natureGifs = $(this).attr("data-name");
-    console.log("natureGif var: " + natureGifs);
     var queryURLSearch = "https://api.giphy.com/v1/gifs/search?api_key=Y8O1g1GuXVaHsUrdiBkw3x7nfIjIgOqa&q=" + natureGifs + "&limit=10&offset=0&rating=G&lang=en";
+    isPlaying = false;
 
     $.ajax ({
         url: queryURLSearch,
         method: "GET"
     }).then(function (response){
 
-        var newDiv = $("<div class='gif-div'>");
-        $("#nature-form").before(newDiv);
+        $(".gif-div").empty();
 
         for (var x = 0; x < response.data.length; x++) {
 
@@ -48,20 +48,17 @@ function showGifs() {
             var image = $("<img>");
             image.attr("src", imgStill);
             image.attr("data-name", response.data[x].id);
-            image.addClass("imgClass");
-            newDiv.append(image);
+            image.addClass("img-responsive imgClass");
+            $(".gif-div").append(image);
 
         }
-
-        console.log(response);
     })
 }
 
 function playGifs() {
-    console.log("play gifs function");
+    //on click of the gif, make a call to giphy.com to get the url by id to show either gif or still image
     var clickedGif = $(this).attr("data-name");
     var queryURLId = "https://api.giphy.com/v1/gifs/" + clickedGif + "?api_key=Y8O1g1GuXVaHsUrdiBkw3x7nfIjIgOqa"
-    //var playGifURL;
     var thisGif = this;
 
     $.ajax ({
@@ -85,10 +82,10 @@ function playGifs() {
     })
 }
 
-
-
 createButtons();
 
+//on click make call to giphy.com to get the 10 api's
 $(document).on("click", ".natureButtons", showGifs);
+//on click of the gif image either start or stop playing the gif
 $(document).on("click", ".imgClass", playGifs);
 

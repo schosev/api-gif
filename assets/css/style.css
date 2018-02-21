@@ -9,3 +9,25 @@ body {
 .natureButtons {
     margin: 10px 10px 10px 0px;
 }
+
+.gif-div {
+    width: 70%;
+    float: left;
+    position: relative;
+}
+
+.imgClass {
+    padding: 10px;
+    display: inline;
+}
+
+#nature-form {
+    width: 30%;
+    padding-left: 10px;
+    padding-top: 30px;
+    float: right;
+}
+
+#nature-input {
+    width: 80%;
+}
