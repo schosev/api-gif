@@ -32,7 +32,7 @@ $("#submit-btn").on("click", function(event) {
 function showGifs() {
     //on click of the button, make a call to giphy.com to get 10 gifs based on the value of the button
     var natureGifs = $(this).attr("data-name");
-    var queryURLSearch = "https://api.giphy.com/v1/gifs/search?api_key=Y8O1g1GuXVaHsUrdiBkw3x7nfIjIgOqa&q=" + natureGifs + "&limit=10&offset=0&rating=G&lang=en";
+    var queryURLSearch = "https://api.giphy.com/v1/gifs/search?api_key=Y8O1g1GuXVaHsUrdiBkw3x7nfIjIgOqa&q=" + natureGifs + "&limit=10&offset=0&rating=PG&lang=en";
     isPlaying = false;
 
     $.ajax ({
@@ -40,16 +40,27 @@ function showGifs() {
         method: "GET"
     }).then(function (response){
 
-        $(".gif-div").empty();
+        $(".gif-container").empty();
 
         for (var x = 0; x < response.data.length; x++) {
 
             var imgStill = response.data[x].images.fixed_height_still.url;
+
+            var imageDiv = $("<div>")
+            imageDiv.addClass("image-div");
+
             var image = $("<img>");
             image.attr("src", imgStill);
             image.attr("data-name", response.data[x].id);
             image.addClass("img-responsive imgClass");
-            $(".gif-div").append(image);
+
+            var rating = $("<p>");
+            rating.text("Rating: " + response.data[x].rating);
+            rating.addClass("display-rating");
+
+            $(".gif-container").append(imageDiv);
+            $(imageDiv).append(image);
+            $(imageDiv).append(rating);
 
         }
     })
